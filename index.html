@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>To‑Do List</title>
+    <link rel="stylesheet" href="./styles.css" />
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  </head>
+  <body>
+    <header class="app-header">
+      <div class="container header-inner">
+        <h1 class="app-title">To‑Do</h1>
+        <button id="themeToggle" class="icon-button" aria-label="Toggle theme" title="Toggle theme">
+          <span>🌙</span>
+        </button>
+      </div>
+    </header>
+
+    <main class="container">
+      <section class="card new-task-card">
+        <h2 class="card-title">Create a new task</h2>
+        <form id="taskForm" class="task-form" autocomplete="off">
+          <div class="form-row">
+            <label for="titleInput" class="sr-only">Title</label>
+            <input id="titleInput" name="title" type="text" placeholder="Task title" maxlength="120" required />
+          </div>
+          <div class="form-row">
+            <label for="descInput" class="sr-only">Description</label>
+            <textarea id="descInput" name="description" placeholder="Optional description" rows="3" maxlength="600"></textarea>
+          </div>
+          <div class="form-actions">
+            <button type="submit" class="btn btn-primary">Add Task</button>
+            <button type="reset" class="btn btn-muted">Clear</button>
+          </div>
+        </form>
+      </section>
+
+      <section class="lists">
+        <div class="list-section">
+          <div class="section-head">
+            <h2>Pending</h2>
+            <span id="pendingCount" class="count-badge">0</span>
+          </div>
+          <ul id="pendingList" class="task-list" aria-live="polite"></ul>
+        </div>
+
+        <div class="list-section">
+          <div class="section-head">
+            <h2>Completed</h2>
+            <div class="section-actions">
+              <span id="completedCount" class="count-badge">0</span>
+              <button id="clearCompleted" class="btn btn-muted btn-small" title="Remove all completed tasks">Clear Completed</button>
+            </div>
+          </div>
+          <ul id="completedList" class="task-list" aria-live="polite"></ul>
+        </div>
+      </section>
+    </main>
+
+    <footer class="app-footer container">
+      <small>Tasks are saved locally in your browser.</small>
+    </footer>
+
+    <script src="./app.js"></script>
+  </body>
+</html>
