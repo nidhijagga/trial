@@ -252,3 +252,132 @@ textarea { resize: vertical; }
   color: var(--muted);
   text-align: center;
 }
+
+/* Toolbar */
+.toolbar {
+  margin-top: 16px;
+}
+.toolbar-grid {
+  display: grid;
+  grid-template-columns: 2fr 1fr 1.5fr 1fr;
+  gap: 10px;
+}
+.toolbar-grid input[type="text"],
+.toolbar-grid select {
+  width: 100%;
+  background: var(--panel-2);
+  color: var(--text);
+  border: 1px solid rgba(255,255,255,0.1);
+  border-radius: 10px;
+  padding: 10px 12px;
+}
+
+/* Form grid */
+.grid-3 {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 10px;
+}
+
+/* Board */
+.board {
+  display: grid;
+  grid-template-columns: repeat(1, 1fr);
+  gap: 16px;
+  margin: 22px 0 32px;
+}
+@media (min-width: 980px) {
+  .board { grid-template-columns: repeat(5, 1fr); }
+}
+
+.column {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.column-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.column-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  min-height: 120px;
+}
+
+/* Kanban card tweaks */
+.kanban-card {
+  grid-template-columns: auto 1fr auto;
+}
+.card-left {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding-top: 2px;
+}
+
+/* Chips */
+.chip {
+  display: inline-flex;
+  align-items: center;
+  height: 22px;
+  padding: 0 8px;
+  border-radius: 999px;
+  border: 1px solid rgba(255,255,255,0.12);
+  font-size: 12px;
+  color: var(--text);
+  background: rgba(255,255,255,0.06);
+}
+.chip-priority.low { background: color-mix(in oklab, var(--success) 12%, transparent); border-color: color-mix(in oklab, var(--success) 40%, transparent); }
+.chip-priority.medium { background: rgba(255,255,255,0.06); }
+.chip-priority.high { background: color-mix(in oklab, var(--primary) 12%, transparent); border-color: color-mix(in oklab, var(--primary) 40%, transparent); }
+.chip-priority.urgent { background: color-mix(in oklab, var(--danger) 12%, transparent); border-color: color-mix(in oklab, var(--danger) 40%, transparent); }
+
+.chip-tag {
+  background: rgba(255,255,255,0.06);
+  border-color: rgba(255,255,255,0.12);
+  margin-left: 6px;
+}
+.tags { display: inline-flex; flex-wrap: wrap; gap: 6px; }
+
+/* Empty state */
+.empty-card { text-align: center; color: var(--muted); }
+
+/* Overdue */
+.meta .overdue { color: var(--danger); font-weight: 600; }
+
+/* Drag and drop */
+.kanban-card.dragging { opacity: 0.6; }
+.drop-indicator {
+  height: 10px;
+  border-radius: 8px;
+  border: 2px dashed rgba(255,255,255,0.15);
+}
+
+/* Generic selects and dates to match inputs */
+select,
+input[type="date"] {
+  width: 100%;
+  background: var(--panel-2);
+  color: var(--text);
+  border: 1px solid rgba(255,255,255,0.1);
+  border-radius: 12px;
+  padding: 10px 12px;
+}
+select:focus,
+input[type="date"]:focus {
+  border-color: var(--primary);
+  box-shadow: 0 0 0 4px color-mix(in oklab, var(--primary) 25%, transparent);
+}
+
+/* Edit form grid */
+.edit-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 10px;
+}
