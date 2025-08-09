@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>To‑Do List</title>
+    <title>Kanban To‑Do</title>
     <link rel="stylesheet" href="./styles.css" />
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -12,10 +12,13 @@
   <body>
     <header class="app-header">
       <div class="container header-inner">
-        <h1 class="app-title">To‑Do</h1>
-        <button id="themeToggle" class="icon-button" aria-label="Toggle theme" title="Toggle theme">
-          <span>🌙</span>
-        </button>
+        <h1 class="app-title">Kanban Board</h1>
+        <div class="header-actions">
+          <input id="searchInput" class="search" type="search" placeholder="Search tasks…" aria-label="Search tasks" />
+          <button id="themeToggle" class="icon-button" aria-label="Toggle theme" title="Toggle theme">
+            <span>🌙</span>
+          </button>
+        </div>
       </div>
     </header>
 
@@ -23,13 +26,40 @@
       <section class="card new-task-card">
         <h2 class="card-title">Create a new task</h2>
         <form id="taskForm" class="task-form" autocomplete="off">
-          <div class="form-row">
-            <label for="titleInput" class="sr-only">Title</label>
-            <input id="titleInput" name="title" type="text" placeholder="Task title" maxlength="120" required />
-          </div>
-          <div class="form-row">
-            <label for="descInput" class="sr-only">Description</label>
-            <textarea id="descInput" name="description" placeholder="Optional description" rows="3" maxlength="600"></textarea>
+          <div class="form-grid">
+            <div class="form-row">
+              <label for="titleInput" class="sr-only">Title</label>
+              <input id="titleInput" name="title" type="text" placeholder="Task title" maxlength="140" required />
+            </div>
+            <div class="form-row">
+              <label for="descInput" class="sr-only">Description</label>
+              <textarea id="descInput" name="description" placeholder="Optional description" rows="3" maxlength="800"></textarea>
+            </div>
+            <div class="form-row">
+              <label for="statusInput" class="sr-only">Status</label>
+              <select id="statusInput" name="status">
+                <option value="backlog" selected>Backlog</option>
+                <option value="in-progress">In Progress</option>
+                <option value="blocked">Blocked</option>
+                <option value="done">Done</option>
+              </select>
+            </div>
+            <div class="form-row">
+              <label for="priorityInput" class="sr-only">Priority</label>
+              <select id="priorityInput" name="priority">
+                <option value="low">Low</option>
+                <option value="medium" selected>Medium</option>
+                <option value="high">High</option>
+              </select>
+            </div>
+            <div class="form-row">
+              <label for="dueInput" class="sr-only">Due date</label>
+              <input id="dueInput" name="dueDate" type="date" />
+            </div>
+            <div class="form-row">
+              <label for="tagsInput" class="sr-only">Tags</label>
+              <input id="tagsInput" name="tags" type="text" placeholder="Tags (comma separated)" />
+            </div>
           </div>
           <div class="form-actions">
             <button type="submit" class="btn btn-primary">Add Task</button>
@@ -38,30 +68,84 @@
         </form>
       </section>
 
-      <section class="lists">
-        <div class="list-section">
-          <div class="section-head">
-            <h2>Pending</h2>
-            <span id="pendingCount" class="count-badge">0</span>
+      <section class="filters card">
+        <div class="filters-grid">
+          <div class="filter-item">
+            <label for="priorityFilter">Priority</label>
+            <select id="priorityFilter">
+              <option value="all" selected>All</option>
+              <option value="high">High</option>
+              <option value="medium">Medium</option>
+              <option value="low">Low</option>
+            </select>
           </div>
-          <ul id="pendingList" class="task-list" aria-live="polite"></ul>
+          <div class="filter-item">
+            <label for="statusFilter">Status</label>
+            <select id="statusFilter">
+              <option value="all" selected>All</option>
+              <option value="backlog">Backlog</option>
+              <option value="in-progress">In Progress</option>
+              <option value="blocked">Blocked</option>
+              <option value="done">Done</option>
+            </select>
+          </div>
+          <div class="filter-item">
+            <label for="dueFilter">Due</label>
+            <select id="dueFilter">
+              <option value="all" selected>All</option>
+              <option value="overdue">Overdue</option>
+              <option value="today">Today</option>
+              <option value="week">This week</option>
+              <option value="none">No due</option>
+            </select>
+          </div>
+          <div class="filter-item">
+            <label for="tagsFilter">Tags</label>
+            <input id="tagsFilter" type="text" placeholder="Filter by tags…" />
+          </div>
+        </div>
+      </section>
+
+      <section class="kanban" aria-label="Kanban board">
+        <div class="kanban-col" data-status="backlog">
+          <div class="section-head">
+            <h2>Backlog</h2>
+            <span id="backlogCount" class="count-badge">0</span>
+          </div>
+          <ul id="backlogList" class="task-list droppable" aria-label="Backlog tasks"></ul>
         </div>
 
-        <div class="list-section">
+        <div class="kanban-col" data-status="in-progress">
           <div class="section-head">
-            <h2>Completed</h2>
+            <h2>In Progress</h2>
+            <span id="inProgressCount" class="count-badge">0</span>
+          </div>
+          <ul id="inProgressList" class="task-list droppable" aria-label="In Progress tasks"></ul>
+        </div>
+
+        <div class="kanban-col" data-status="blocked">
+          <div class="section-head">
+            <h2>Blocked</h2>
+            <span id="blockedCount" class="count-badge">0</span>
+          </div>
+          <ul id="blockedList" class="task-list droppable" aria-label="Blocked tasks"></ul>
+        </div>
+
+        <div class="kanban-col" data-status="done">
+          <div class="section-head">
+            <h2>Done</h2>
             <div class="section-actions">
-              <span id="completedCount" class="count-badge">0</span>
-              <button id="clearCompleted" class="btn btn-muted btn-small" title="Remove all completed tasks">Clear Completed</button>
+              <span id="doneCount" class="count-badge">0</span>
+              <button id="clearDone" class="btn btn-muted btn-small" title="Remove all done tasks">Clear Done</button>
             </div>
           </div>
-          <ul id="completedList" class="task-list" aria-live="polite"></ul>
+          <ul id="doneList" class="task-list droppable" aria-label="Done tasks"></ul>
         </div>
       </section>
     </main>
 
     <footer class="app-footer container">
-      <small>Tasks are saved locally in your browser.</small>
+      <small>Drag cards between columns to change status. Tasks persist in your browser.</small>
     </footer>
 
     <script src="./app.js"></script>
