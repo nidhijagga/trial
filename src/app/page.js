@@ -1,101 +1,97 @@
-import Image from "next/image";
+"use client"
+import { useEffect, useMemo, useState } from "react";
+import { generateThemeTokens } from "./themeGenerator";
+import { applyTheme } from "./middleware";
+import { Button } from "./components/Button";
+import { Card } from "./components/Card";
+import { Table } from "./components/Table";
+import { Modal } from "./components/Modal";
+import { Badge } from "./components/Badge";
+import { Alert } from "./components/Alert";
+import { Input } from "./components/Input";
+import { Switch } from "./components/Switch";
+import { Tabs } from "./components/Tabs";
 
 export default function Home() {
-  return (
-    <div className="grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20 font-[family-name:var(--font-geist-sans)]">
-      <main className="flex flex-col gap-8 row-start-2 items-center sm:items-start">
-        <Image
-          className="dark:invert"
-          src="https://nextjs.org/icons/next.svg"
-          alt="Next.js logo"
-          width={180}
-          height={38}
-          priority
-        />
-        <ol className="list-inside list-decimal text-sm text-center sm:text-left font-[family-name:var(--font-geist-mono)]">
-          <li className="mb-2">
-            Get started by editing{" "}
-            <code className="bg-black/[.05] dark:bg-white/[.06] px-1 py-0.5 rounded font-semibold">
-              src/app/page.js
-            </code>
-            .
-          </li>
-          <li>Save and see your changes instantly.</li>
-        </ol>
+	const presetA = useMemo(() => ({ primary: "#4F46E5", secondary: "#22C55E", tertiary: "#F59E0B" }), []); // indigo, green, amber
+	const presetB = useMemo(() => ({ primary: "#2563EB", secondary: "#EC4899", tertiary: "#14B8A6" }), []); // blue, pink, teal
+	const [palette, setPalette] = useState(presetA);
 
-        <div className="flex gap-4 items-center flex-col sm:flex-row">
-          <a
-            className="rounded-full border border-solid border-transparent transition-colors flex items-center justify-center bg-foreground text-background gap-2 hover:bg-[#383838] dark:hover:bg-[#ccc] text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="https://nextjs.org/icons/vercel.svg"
-              alt="Vercel logomark"
-              width={20}
-              height={20}
-            />
-            Deploy now
-          </a>
-          <a
-            className="rounded-full border border-solid border-black/[.08] dark:border-white/[.145] transition-colors flex items-center justify-center hover:bg-[#f2f2f2] dark:hover:bg-[#1a1a1a] hover:border-transparent text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 sm:min-w-44"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Read our docs
-          </a>
-        </div>
-      </main>
-      <footer className="row-start-3 flex gap-6 flex-wrap items-center justify-center">
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="https://nextjs.org/icons/file.svg"
-            alt="File icon"
-            width={16}
-            height={16}
-          />
-          Learn
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="https://nextjs.org/icons/window.svg"
-            alt="Window icon"
-            width={16}
-            height={16}
-          />
-          Examples
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="https://nextjs.org/icons/globe.svg"
-            alt="Globe icon"
-            width={16}
-            height={16}
-          />
-          Go to nextjs.org →
-        </a>
-      </footer>
-    </div>
-  );
+	useEffect(() => {
+		const tokens = generateThemeTokens(palette);
+		applyTheme(tokens);
+	}, [palette]);
+
+	return (
+		<div style={{ display: "grid", gap: 20, padding: 24, maxWidth: 1000 }}>
+			<div style={{ display: "flex", gap: 8, alignItems: "center" }}>
+				<span style={{ fontWeight: 600 }}>Theme presets:</span>
+				<Button size="sm" variant="primary" onClick={() => setPalette(presetA)}>Indigo/Green/Amber</Button>
+				<Button size="sm" variant="secondary" onClick={() => setPalette(presetB)}>Blue/Pink/Teal</Button>
+				<Button size="sm" outline variant="tertiary" onClick={() => setPalette(prev => ({...prev}))}>Re-apply</Button>
+				<div style={{ marginLeft: "auto", display: "flex", gap: 8 }}>
+					<Badge variant="primary">primary {palette.primary}</Badge>
+					<Badge variant="secondary">secondary {palette.secondary}</Badge>
+					<Badge variant="tertiary">tertiary {palette.tertiary}</Badge>
+				</div>
+			</div>
+
+			<Card accent="primary">
+				<h3 style={{ marginTop: 0 }}>Buttons</h3>
+				<div style={{ display: "flex", gap: 12, flexWrap: "wrap" }}>
+					<Button variant="primary">Primary</Button>
+					<Button variant="secondary">Secondary</Button>
+					<Button variant="tertiary">Tertiary</Button>
+					<Button outline variant="primary">Outline Primary</Button>
+					<Button outline variant="secondary">Outline Secondary</Button>
+					<Button outline variant="tertiary">Outline Tertiary</Button>
+					<Button size="sm" variant="primary">Small</Button>
+					<Button size="lg" variant="primary">Large</Button>
+				</div>
+			</Card>
+
+			<div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 20 }}>
+				<Card accent="secondary">
+					<h3 style={{ marginTop: 0 }}>Inputs & Switch</h3>
+					<div style={{ display: "grid", gap: 12 }}>
+						<Input id="name" label="Your name" placeholder="Jane Doe" />
+						<Input id="email" label="Email" placeholder="jane@example.com" />
+						<div style={{ display: "flex", alignItems: "center", gap: 10 }}>
+							<Switch />
+							<span>Enable notifications</span>
+						</div>
+					</div>
+				</Card>
+
+				<Card accent="tertiary">
+					<h3 style={{ marginTop: 0 }}>Alerts</h3>
+					<div style={{ display: "grid", gap: 12 }}>
+						<Alert variant="primary" title="Primary alert">This uses the primary palette.</Alert>
+						<Alert variant="secondary" title="Secondary alert">Notice the secondary tones.</Alert>
+						<Alert variant="tertiary" title="Tertiary alert">Subtle background and colored border.</Alert>
+					</div>
+				</Card>
+			</div>
+
+			<Modal title="Demo Modal" accent="secondary">Modal content themed with secondary border.</Modal>
+
+			<Card accent="primary">
+				<h3 style={{ marginTop: 0 }}>Tabs</h3>
+				<div style={{ display: "grid", gap: 12 }}>
+					<Tabs accent="primary" items={["Overview", "Details", "Settings"]} />
+					<Tabs accent="secondary" items={["Today", "This Week", "This Month"]} />
+					<Tabs accent="tertiary" items={["Alpha", "Beta", "Stable"]} />
+				</div>
+			</Card>
+
+			<Card accent="primary">
+				<h3 style={{ marginTop: 0 }}>Tables</h3>
+				<div style={{ display: "grid", gap: 12 }}>
+					<Table accent="primary" />
+					<Table accent="secondary" />
+					<Table accent="tertiary" />
+				</div>
+			</Card>
+		</div>
+	);
 }
